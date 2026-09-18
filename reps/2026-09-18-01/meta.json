@@ -4,5 +4,7 @@
   "prompt": "Fade in and move a single word using power2.out",
   "notes": "",
   "date": "2026-09-18",
-  "candidate": false
+  "candidate": false,
+  "fps": 60,
+  "duration": 1.1
 }

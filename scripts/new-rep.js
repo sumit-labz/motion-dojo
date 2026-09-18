@@ -76,6 +76,8 @@ async function main() {
     notes: '',
     date: today,
     candidate: false,
+    fps: 60,
+    duration: null,
   };
   fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');
 
