@@ -92,6 +92,8 @@ time for both.
     60fps in the harness regardless of export fps).
   - `--aspect 16:9|4:5|9:16` — export at a different aspect than the rep's own `aspect`
     field, without editing the rep file.
+  - `--keep` — don't delete the generated `.hf-export/<id>/` composition after
+    rendering; see [HYPERFRAMES.md](HYPERFRAMES.md) for what's in it.
 - `npm run index` — optional: writes a static `reps-index.json` snapshot. Not needed day
   to day — the contact sheet reads `/api/reps` live from a Vite dev middleware, so a
   freshly-created rep shows up on refresh with zero build step.

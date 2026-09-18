@@ -13,11 +13,12 @@ const ASPECT_SIZES = {
 };
 
 function parseArgs(argv) {
-  const args = { id: null, fps: 60, aspect: null };
+  const args = { id: null, fps: 60, aspect: null, keep: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--fps') args.fps = Number(argv[++i]);
     else if (a === '--aspect') args.aspect = argv[++i];
+    else if (a === '--keep') args.keep = true;
     else if (!args.id) args.id = a;
   }
   return args;
@@ -44,10 +45,10 @@ function checkFfmpeg() {
 }
 
 async function run() {
-  const { id, fps, aspect: aspectOverride } = parseArgs(process.argv.slice(2));
+  const { id, fps, aspect: aspectOverride, keep } = parseArgs(process.argv.slice(2));
 
   if (!id) {
-    console.error('Usage: npm run export -- <id> [--fps 30|60] [--aspect 16:9|4:5|9:16]');
+    console.error('Usage: npm run export -- <id> [--fps 30|60] [--aspect 16:9|4:5|9:16] [--keep]');
     process.exit(1);
   }
   if (![24, 30, 60].includes(fps)) {
@@ -123,7 +124,11 @@ async function run() {
   meta.duration = duration;
   fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2) + '\n');
 
-  fs.rmSync(dir, { recursive: true, force: true });
+  if (keep) {
+    console.log(`Kept generated composition at ${dir} (--keep)`);
+  } else {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 
   console.log(`\nDone (${duration}s @ ${fps}fps):\n  ${mp4Path}\n  ${gifPath}\n`);
 }
