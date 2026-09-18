@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "rep": "node scripts/new-rep.js",
-    "record": "node scripts/record.js",
+    "export": "node scripts/export.js",
+    "lint:reps": "node scripts/lint-reps.js",
     "index": "node scripts/build-index.js"
   },
   "dependencies": {
@@ -16,7 +17,8 @@
     "troika-three-text": "^0.52.4"
   },
   "devDependencies": {
-    "vite": "^6.0.0",
-    "playwright": "^1.49.0"
+    "esbuild": "^0.25.12",
+    "hyperframes": "^0.8.46",
+    "vite": "^6.0.0"
   }
 }

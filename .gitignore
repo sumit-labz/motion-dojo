@@ -2,4 +2,6 @@ node_modules/
 dist/
 *.log
 reps/*/__frames__/
+reps/*/__gif_frames__/
+.hf-export/
 .claude/
