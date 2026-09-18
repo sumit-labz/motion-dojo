@@ -265,9 +265,6 @@ async function main() {
     wireKeyboard();
     keyboardWired = true;
   }
-
-  // Automation hook for scripts/record.js — not part of the rep-author contract.
-  window.__motionDojo = { timeline: sessions[0].timeline, stage: sessions[0].stage };
 }
 
 main();
