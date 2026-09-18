@@ -1,0 +1,22 @@
+{
+  "name": "motion-dojo",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "rep": "node scripts/new-rep.js",
+    "record": "node scripts/record.js",
+    "index": "node scripts/build-index.js"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "three": "^0.170.0",
+    "troika-three-text": "^0.52.4"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0",
+    "playwright": "^1.49.0"
+  }
+}
