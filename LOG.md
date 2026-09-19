@@ -1,5 +1,7 @@
-# Motion Dojo Log
+# Motion Dojo — Progress Log
+
+One row per rep. Never skip a row, even for a bad rep. The log is the curriculum's memory.
 
 | # | Date | Phase | Prompt | What I learned about timing | Candidate? |
 |---|------|-------|--------|------------------------------|------------|
-| 1 | 2026-09-18 | 1 | Fade in and move a single word using power2.out | | |
+| 001 | | 0 | Trivial fade — prove the loop | | |

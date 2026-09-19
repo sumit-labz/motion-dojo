@@ -2,6 +2,7 @@ import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { phaseProgress } from './lib/curriculum.js';
 
 const DEV_PORT = 5173;
 const REPS_DIR = 'reps';
@@ -26,36 +27,52 @@ function escapeForTable(text) {
   return text.replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
 }
 
-function appendLogRow({ id, today, phase, prompt }) {
+function appendLogRow({ today, phase, prompt }) {
   const logPath = 'LOG.md';
   const content = fs.readFileSync(logPath, 'utf-8');
-  const rowLines = content
+  const rowNumbers = content
     .split('\n')
-    .filter((line) => /^\|\s*\d+\s*\|/.test(line));
-  const n = rowLines.length + 1;
-  const row = `| ${n} | ${today} | ${phase} | ${escapeForTable(prompt)} | | |\n`;
+    .map((line) => line.match(/^\|\s*(\d+)\s*\|/))
+    .filter(Boolean)
+    .map((m) => Number(m[1]));
+  const n = (rowNumbers.length ? Math.max(...rowNumbers) : 0) + 1;
+  const label = String(n).padStart(3, '0');
+  const row = `| ${label} | ${today} | ${phase} | ${escapeForTable(prompt)} | | |\n`;
   fs.writeFileSync(logPath, content.replace(/\n?$/, '\n') + row);
-  return n;
+  return label;
 }
 
-async function main() {
-  const rl = createInterface({ input: stdin, output: stdout });
-
-  let phaseAnswer = await rl.question('Phase number: ');
-  let phase = Number.parseInt(phaseAnswer, 10);
+async function createOneRep(rl, lastPhase) {
+  const phaseDefault = lastPhase ?? 1;
+  const phaseAnswer = await rl.question(`Phase number [${phaseDefault}]: `);
+  let phase = phaseAnswer.trim() ? Number.parseInt(phaseAnswer, 10) : phaseDefault;
   if (Number.isNaN(phase)) {
     console.warn('Could not parse a phase number, defaulting to 0.');
     phase = 0;
   }
 
+  const progress = phaseProgress(phase);
   let prompt = '';
-  while (!prompt.trim()) {
-    prompt = await rl.question('Prompt / brief for this rep: ');
-    if (!prompt.trim()) console.log('Prompt cannot be empty.');
+  if (progress) {
+    console.log(`Phase ${phase} — ${progress.title}: ${progress.done}/${progress.total} lessons logged.`);
+    if (progress.next) {
+      const answer = await rl.question(`Prompt [Enter for next lesson: "${progress.next}"]: `);
+      prompt = answer.trim() || progress.next;
+    } else {
+      console.log(`All curriculum lessons for phase ${phase} are done — free rep, or move to the next phase.`);
+      while (!prompt.trim()) {
+        prompt = await rl.question('Prompt / brief for this rep: ');
+        if (!prompt.trim()) console.log('Prompt cannot be empty.');
+      }
+      prompt = prompt.trim();
+    }
+  } else {
+    while (!prompt.trim()) {
+      prompt = await rl.question('Prompt / brief for this rep: ');
+      if (!prompt.trim()) console.log('Prompt cannot be empty.');
+    }
+    prompt = prompt.trim();
   }
-  prompt = prompt.trim();
-
-  rl.close();
 
   const { today, id } = nextId();
   const dir = path.join(REPS_DIR, id);
@@ -81,11 +98,27 @@ async function main() {
   };
   fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');
 
-  const n = appendLogRow({ id, today, phase, prompt });
+  const label = appendLogRow({ today, phase, prompt });
 
   console.log(`\nCreated reps/${id}/`);
-  console.log(`Logged as row #${n} in LOG.md`);
-  console.log(`\n  http://localhost:${DEV_PORT}/rep.html?id=${id}\n`);
+  console.log(`Logged as row #${label} in LOG.md`);
+  console.log(`  http://localhost:${DEV_PORT}/rep.html?id=${id}\n`);
+
+  return phase;
+}
+
+async function main() {
+  const rl = createInterface({ input: stdin, output: stdout });
+
+  let lastPhase;
+  let again = true;
+  while (again) {
+    lastPhase = await createOneRep(rl, lastPhase);
+    const answer = (await rl.question('Another rep now? [Y/n]: ')).trim().toLowerCase();
+    again = answer !== 'n' && answer !== 'no';
+  }
+
+  rl.close();
 }
 
 main();

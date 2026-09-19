@@ -1,0 +1,71 @@
+{
+  "phases": [
+    {
+      "phase": 0,
+      "title": "Setup and seeing",
+      "lessons": [
+        "Trivial fade — prove the loop",
+        "Same fade, but scrub it backwards by eye before reading the numbers"
+      ]
+    },
+    {
+      "phase": 1,
+      "title": "Weight and timing (eases)",
+      "lessons": [
+        "One word fades in at three durations — find the true one",
+        "Same move with linear vs power2.out vs power4.out — name the difference in one sentence",
+        "A shape overshoots into place with back.out — tune the overshoot until it stops looking silly",
+        "Two identical words, one eased one linear, side by side in A/B mode — which reads as \"alive\"?",
+        "Bounce a dot to a stop with a custom ease you hand-tune, not a preset",
+        "Anticipation: a small pull-back before the main move (principle #2)",
+        "Match a real-world weight (a heavy door vs a ping-pong ball) using only duration + ease",
+        "Slow in / slow out on a straight-line move — no easing preset, hand-placed keyframes via multiple tweens"
+      ]
+    },
+    {
+      "phase": 2,
+      "title": "Type as material",
+      "lessons": [
+        "Reveal a headline word by word with staggered opacity",
+        "Split a word into letters and stagger their rise (SplitText)",
+        "Animate font-variation-settings weight from thin to bold on hover-less loop",
+        "Kinetic type: one sentence, one word emphasized by scale + weight change mid-timeline",
+        "Type tracking (letter-spacing) animates tight-to-loose as a reveal",
+        "Two-line headline where line 2 arrives while line 1 is still settling (overlap, not sequence)"
+      ]
+    },
+    {
+      "phase": 3,
+      "title": "Sequencing (the edit)",
+      "lessons": [
+        "Three elements enter in sequence using position parameters, not manual delays",
+        "Same three elements, now overlapping by 30% — feel the difference from lesson 1",
+        "A label-driven timeline: tl.addLabel() to mark 'intro'/'hold'/'exit' and scrub between them",
+        "Exit before the next entrance starts — no dead air, no overlap",
+        "One timeline nested inside another (a sub-timeline for a repeating unit)",
+        "Re-time an existing rep: same elements, cut its total duration by 40% without losing the beats"
+      ]
+    },
+    {
+      "phase": 4,
+      "title": "Transitions and continuity",
+      "lessons": [
+        "Flip: a box moves from one layout position to another, animated by Flip.from()",
+        "Flip a shared element between two 'scenes' inside one timeline (a fake page transition)",
+        "Crossfade two states of the same element (color + position) using Flip vs. manual tween — compare",
+        "A card expands to fill the stage and back down (Flip + scale)",
+        "Stagger a Flip across a small grid of elements reflowing from 3 columns to 1"
+      ]
+    },
+    {
+      "phase": 5,
+      "title": "Scroll as time (ScrollTrigger)",
+      "lessons": [
+        "Pin a word and scrub its entrance tied to scroll position instead of time",
+        "A progress bar driven by ScrollTrigger instead of the harness scrub slider",
+        "Scrub a multi-step sequence (3 beats) across one long scroll region",
+        "Toggle a class on enter/leave using ScrollTrigger callbacks, not tweened opacity"
+      ]
+    }
+  ]
+}

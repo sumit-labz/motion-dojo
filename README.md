@@ -17,10 +17,16 @@ it prints if missing). Rendering itself goes through
 
 ## Daily workflow
 
+Self-paced, not one-a-day: do as many reps in a sitting as you want. `npm run rep` loops
+— it asks "Another rep now?" after each one — and `npm run curriculum` shows how far
+through the lesson bank you are, so there's always a next thing to do rather than staring
+at a blank prompt.
+
 1. `npm run dev` — starts Vite.
-2. `npm run rep` — answers two prompts (phase number, prompt/brief), scaffolds
-   `reps/YYYY-MM-DD-NN/`, appends a row to `LOG.md`, and prints the rep's URL.
-3. Open that URL, edit `reps/<id>/rep.js`, save — Vite HMR re-runs `build()` live, no
+2. `npm run rep` — pick a phase, hit Enter to accept the suggested next lesson (or type
+   your own prompt), and it scaffolds `reps/YYYY-MM-DD-NN/`, appends a row to `LOG.md`,
+   prints the rep's URL, then asks if you want another. Keep going, or answer `n`.
+3. Open a rep's URL, edit `reps/<id>/rep.js`, save — Vite HMR re-runs `build()` live, no
    reload.
 4. Use the harness controls (or keyboard: `Space` replay, `←`/`→` frame-step, `g` grid,
    `s` safe areas, `d` GSDevTools) to study the move.
@@ -79,10 +85,29 @@ both equally. Frame-step (`←`/`→`) instead moves each timeline by an absolut
 clamped to its own duration, since a frame-accurate nudge should mean the same physical
 time for both.
 
+## Self-paced curriculum
+
+`curriculum.json` is a bank of ~30 lessons grouped into phases (0 — setup, 1 — weight and
+timing, 2 — type as material, 3 — sequencing, 4 — transitions/Flip, 5 — scroll as time).
+It's a lesson bank, not a schedule: nothing paces it to one-per-day, and there's no
+"complete phase 1 before touching phase 2" gate — jump around, repeat a phase, whatever
+keeps you moving.
+
+- `npm run curriculum` — prints progress per phase (done/total, a progress bar, and the
+  next un-logged lesson) plus an overall count.
+- `npm run rep` reads the same data: for whichever phase you pick, it suggests the next
+  lesson you haven't logged yet and pre-fills it on Enter. "Done" for a rep means a
+  `meta.json` exists in `reps/` with that phase and a matching prompt — completion is
+  read live off the reps folder, not tracked separately, so it can't drift out of sync.
+- Once a phase's lessons are exhausted, `npm run rep` says so and lets you free-rep
+  (type any prompt) instead of blocking you.
+- Add/reorder/edit lessons directly in `curriculum.json` any time — it's just data.
+
 ## Scripts
 
 - `npm run dev` — Vite dev server.
-- `npm run rep` — interactive new-rep scaffolder.
+- `npm run rep` — interactive new-rep scaffolder; loops so one run can create several reps.
+- `npm run curriculum` — self-paced progress dashboard (see above).
 - `npm run lint:reps` — static HyperFrames-compatibility check across every `reps/*/rep.js`.
 - `npm run export -- <id>` — wraps the rep into a throwaway HyperFrames composition,
   renders it, and writes `out.mp4` + `thumb.gif` (720px wide, ≤4s, palette-optimized) into
@@ -159,3 +184,10 @@ time for both.
   (aliasing `gsap` to the local shim). It was already present transitively (via Vite and
   HyperFrames), but importing it directly from `scripts/lib/hf-compose.js` without
   declaring it would be fragile if either of those stopped depending on it.
+- **Self-paced curriculum, not a daily cap**: "too little to learn in one day" was solved
+  by (a) making `npm run rep` loop so one sitting can produce as many reps as you want —
+  the tool never limited this, `nextId()` already auto-increments `NN` per day, the
+  constraint was purely UX — and (b) a `curriculum.json` lesson bank so you're never stuck
+  inventing a prompt. Completion is derived live from `reps/*/meta.json` (phase + matching
+  prompt) rather than tracked in a separate progress file, so it can't drift out of sync
+  with what you've actually logged.
