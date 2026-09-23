@@ -1,70 +1,58 @@
 {
   "phases": [
     {
-      "phase": 0,
-      "title": "Setup and seeing",
-      "lessons": [
-        "Trivial fade — prove the loop",
-        "Same fade, but scrub it backwards by eye before reading the numbers"
-      ]
-    },
-    {
       "phase": 1,
-      "title": "Weight and timing (eases)",
+      "title": "Layout and staging (still frame, no motion)",
+      "goal": "Master all eight layout systems from Kimberly Elam's Typographic Systems — axial, radial, dilatational, random, grid, modular, transitional, bilateral — as fluently readable, buildable compositions. Added as a stated goal 2026-09-23.",
       "lessons": [
-        "One word fades in at three durations — find the true one",
-        "Same move with linear vs power2.out vs power4.out — name the difference in one sentence",
-        "A shape overshoots into place with back.out — tune the overshoot until it stops looking silly",
-        "Two identical words, one eased one linear, side by side in A/B mode — which reads as \"alive\"?",
-        "Bounce a dot to a stop with a custom ease you hand-tune, not a preset",
-        "Anticipation: a small pull-back before the main move (principle #2)",
-        "Match a real-world weight (a heavy door vs a ping-pong ball) using only duration + ease",
-        "Slow in / slow out on a straight-line move — no easing preset, hand-placed keyframes via multiple tweens"
+        "Pick a still from the reference pack. Direct a layout with the same weight distribution, different words.",
+        "Same layout, direct it with the anchor moved. What changes about what the frame means?",
+        "Direct a frame with deliberate negative space — where nothing is, on purpose.",
+        "Direct two versions of the same words: one centered/stable, one off-balance/tense. Name the emotional difference.",
+        "Pull one beat from the Inception script. Direct its layout as a still frame — no motion — before touching timing."
       ]
     },
     {
       "phase": 2,
-      "title": "Type as material",
+      "title": "Storyboarding (director-level planning)",
       "lessons": [
-        "Reveal a headline word by word with staggered opacity",
-        "Split a word into letters and stagger their rise (SplitText)",
-        "Animate font-variation-settings weight from thin to bold on hover-less loop",
-        "Kinetic type: one sentence, one word emphasized by scale + weight change mid-timeline",
-        "Type tracking (letter-spacing) animates tight-to-loose as a reveal",
-        "Two-line headline where line 2 arrives while line 1 is still settling (overlap, not sequence)"
+        "Take one scene from the Inception script. Write a beat table: time code, VO line, mood direction, visual description.",
+        "Get a storyboard.html built from that beat table. Review it as a static contact sheet before anything moves.",
+        "Revise the beat table based on what the storyboard showed.",
+        "Lock one storyboard — this becomes the plan for Phase 4's build."
       ]
     },
     {
       "phase": 3,
-      "title": "Sequencing (the edit)",
+      "title": "Kinetic typography — when to use what",
       "lessons": [
-        "Three elements enter in sequence using position parameters, not manual delays",
-        "Same three elements, now overlapping by 30% — feel the difference from lesson 1",
-        "A label-driven timeline: tl.addLabel() to mark 'intro'/'hold'/'exit' and scrub between them",
-        "Exit before the next entrance starts — no dead air, no overlap",
-        "One timeline nested inside another (a sub-timeline for a repeating unit)",
-        "Re-time an existing rep: same elements, cut its total duration by 40% without losing the beats"
+        "Pick two clips from the reference pack using different reveal moves on similar material. Fill in a row of the decision table from what you observe.",
+        "Pull 'He says: I do this for the money.' (Scene 2). Decide the right move using the decision table, and direct it.",
+        "Pull 'Mal keeps appearing.' (Scene 4). Direct it with the move the table says is wrong, on purpose — confirm it actually hurts.",
+        "Pull 'Once you see it, the heist stops being the point' (Scene 3) — a line that changes register mid-sentence. Decide one move or two, and direct it.",
+        "Assign a move to every line of one full beat using only the table, no new decisions. Time yourself."
       ]
     },
     {
       "phase": 4,
-      "title": "Transitions and continuity",
+      "title": "Motion as direction (timing and weight)",
       "lessons": [
-        "Flip: a box moves from one layout position to another, animated by Flip.from()",
-        "Flip a shared element between two 'scenes' inside one timeline (a fake page transition)",
-        "Crossfade two states of the same element (color + position) using Flip vs. manual tween — compare",
-        "A card expands to fill the stage and back down (Flip + scale)",
-        "Stagger a Flip across a small grid of elements reflowing from 3 columns to 1"
+        "Direct the arrival of 'Mal.' — describe the feeling (intrusive? inevitable?), review variations, judge which is true.",
+        "Direct 'home' (Scene 3) two ways — heavy and weightless. Same words, only the feeling changes.",
+        "Direct the anticipation beat for 'the money' (Scene 2) — pull back before the reveal.",
+        "Direct one full transition: the match cut described in the Story Dojo notes (surface claim → deeper pattern).",
+        "Take the locked storyboard and Phase 3's type-move decisions. Direct motion for each beat in sequence — first assembled candidate."
       ]
     },
     {
       "phase": 5,
-      "title": "Scroll as time (ScrollTrigger)",
+      "title": "Space and camera — the director's vocabulary for 3D",
       "lessons": [
-        "Pin a word and scrub its entrance tied to scroll position instead of time",
-        "A progress bar driven by ScrollTrigger instead of the harness scrub slider",
-        "Scrub a multi-step sequence (3 beats) across one long scroll region",
-        "Toggle a class on enter/leave using ScrollTrigger callbacks, not tweened opacity"
+        "Take one Phase 4 beat. Decide: does this need depth, or does a flat frame already serve it? If flat serves it, log that and stop.",
+        "For a beat that needs it: direct the same framing at two lens choices (wide vs. long). Name the emotional difference.",
+        "Direct the same shot at three camera heights. Name the power relation each implies.",
+        "Direct a reveal using fog/depth-of-field instead of a cut or mask.",
+        "Direct one real Inception beat in depth, only if session 1 confirmed it earns the dimension."
       ]
     }
   ]

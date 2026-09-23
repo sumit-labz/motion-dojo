@@ -1,8 +1,11 @@
 # Motion Dojo
 
-A local daily-rep playground for practising motion design in the browser. One rep = one
-small GSAP animation exercise in its own file. The harness supplies the stage, controls,
-and export — you only ever write `build(stage)`.
+A local practice playground for directing motion design in the browser. You are the
+director, not the coder: you describe what a beat should feel like, in plain language, and
+the actual `rep.js` — the GSAP/timeline code — gets written for you (by Claude, in
+conversation) and staged into this repo. You never write GSAP syntax yourself. The harness
+supplies the stage, controls, and export; your job is planning (layout, storyboard, which
+typographic move a line calls for) and judging (which built variation is true).
 
 ## Setup (one time)
 
@@ -17,26 +20,41 @@ it prints if missing). Rendering itself goes through
 
 ## Daily workflow
 
-Self-paced, not one-a-day: do as many reps in a sitting as you want. `npm run rep` loops
-— it asks "Another rep now?" after each one — and `npm run curriculum` shows how far
-through the lesson bank you are, so there's always a next thing to do rather than staring
-at a blank prompt.
+Self-paced, not one-a-day. `npm run curriculum` shows how far through the phase bank you
+are, so there's always a next session to bring rather than starting from a blank idea.
 
 1. `npm run dev` — starts Vite.
-2. `npm run rep` — pick a phase, hit Enter to accept the suggested next lesson (or type
-   your own prompt), and it scaffolds `reps/YYYY-MM-DD-NN/`, appends a row to `LOG.md`,
-   prints the rep's URL, then asks if you want another. Keep going, or answer `n`.
-3. Open a rep's URL, edit `reps/<id>/rep.js`, save — Vite HMR re-runs `build()` live, no
-   reload.
-4. Use the harness controls (or keyboard: `Space` replay, `←`/`→` frame-step, `g` grid,
-   `s` safe areas, `d` GSDevTools) to study the move.
-5. `npm run lint:reps` — fast static check that the rep obeys the HyperFrames contract
-   (below). Worth running before export; also worth running any time, since it's instant.
-6. When happy, `npm run export -- <id>` to render `thumb.gif` + `out.mp4` into the rep's
+2. `npm run rep` — pick a phase, hit Enter to accept the suggested next session (or type
+   your own). This creates `reps/YYYY-MM-DD-NN/`, writes a starter `meta.json`
+   (`status: "awaiting-direction"` — no `rep.js` yet), appends a row to `LOG.md`, and
+   prints the exact prompt to bring to Claude. Answer "Another session now?" to queue up
+   more than one before you start directing.
+3. **Bring the printed prompt to Claude** — in this project's conversation, describe what
+   the beat should feel like (weight, arrival, mood — plain language, not code). Claude
+   writes `reps/<id>/rep.js` and stages it into this repo directly.
+4. Open the rep's URL (`rep.html?id=<id>`) and use the harness controls (`Space` replay,
+   `←`/`→` frame-step, `g` grid, `s` safe areas, `d` GSDevTools) to review what got built.
+5. Judge: is this the true version? If not, go back to Claude and redirect — "make it feel
+   more reluctant," "hold longer before it arrives" — rather than editing the code
+   yourself. Repeat until it's right.
+6. `npm run lint:reps` — fast static check that the rep obeys the HyperFrames contract
+   (below). This still matters even though you didn't write the code — it's your
+   guarantee the export will render correctly.
+7. When happy, `npm run export -- <id>` to render `thumb.gif` + `out.mp4` into the rep's
    folder via HyperFrames.
-7. Fill in the last two columns of the new `LOG.md` row ("what I learned about timing",
-   "Candidate?").
-8. Check `index.html` (the contact sheet) to browse everything and flag candidates.
+8. Fill in the log row's last two columns — your judgment in your own words, and whether
+   it's a real candidate for the piece.
+9. Check `index.html` (the contact sheet) to browse everything and flag candidates.
+
+**Storyboarding a scene (Phase 2), before any motion is built:**
+
+1. Write a beat table as JSON — one entry per beat, `{ time, vo, mood, visual }` — either
+   by hand or dictated to Claude, who writes the JSON file for you.
+2. `npm run storyboard -- <beats.json> <id>` — builds a static `reps/<id>/storyboard.html`
+   contact sheet: one card per beat, no motion, just the planned frame and its intent.
+3. Open it in a browser. Review the sequence as a whole before committing to any timing.
+4. Revise the beat table and regenerate until the storyboard is locked — this is where
+   most of the director's judgment actually happens, cheaply, before Phase 4's build.
 
 ## Writing a rep that exports cleanly (HyperFrames constraints)
 
@@ -60,6 +78,10 @@ allowed to do, and it was already most of the rep contract; this just makes it l
   the slow way.
 
 ## The rep contract
+
+This is what Claude writes into `reps/<id>/rep.js` when you bring it a direction — you
+never write this yourself, but it's worth knowing the shape so you can read a built rep
+and know precisely what to ask to change.
 
 ```js
 export default {
@@ -87,27 +109,45 @@ time for both.
 
 ## Self-paced curriculum
 
-`curriculum.json` is a bank of ~30 lessons grouped into phases (0 — setup, 1 — weight and
-timing, 2 — type as material, 3 — sequencing, 4 — transitions/Flip, 5 — scroll as time).
-It's a lesson bank, not a schedule: nothing paces it to one-per-day, and there's no
-"complete phase 1 before touching phase 2" gate — jump around, repeat a phase, whatever
-keeps you moving.
+`curriculum.json` is a bank of director-direction sessions grouped into phases:
+
+- **Phase 1 — Layout and staging.** Composition, weight, anchor — a still frame, no
+  motion at all.
+- **Phase 2 — Storyboarding.** Beat tables, `storyboard.html` review, locking a sequence
+  before any timing is built.
+- **Phase 3 — Kinetic typography, when to use what.** A decision table (which reveal move
+  reads as what, and when each one actively hurts), applied to real script lines.
+- **Phase 4 — Motion as direction.** Timing and weight, applied to the locked storyboard
+  and Phase 3's type-move decisions.
+- **Phase 5 — Space and camera.** The director's vocabulary for 3D (lens, height, depth,
+  light as staging) — entered only when a beat genuinely needs it.
+
+None of these phases ask you to learn animation syntax. Each session is a direction you
+give in plain language; what gets built is Claude's job. It's a session bank, not a
+schedule — no "complete phase 1 before touching phase 2" gate, jump around as your actual
+Story Dojo work demands.
 
 - `npm run curriculum` — prints progress per phase (done/total, a progress bar, and the
-  next un-logged lesson) plus an overall count.
+  next un-logged session) plus an overall count.
 - `npm run rep` reads the same data: for whichever phase you pick, it suggests the next
-  lesson you haven't logged yet and pre-fills it on Enter. "Done" for a rep means a
-  `meta.json` exists in `reps/` with that phase and a matching prompt — completion is
-  read live off the reps folder, not tracked separately, so it can't drift out of sync.
-- Once a phase's lessons are exhausted, `npm run rep` says so and lets you free-rep
+  session you haven't logged yet and pre-fills it on Enter. "Done" means a `meta.json`
+  exists in `reps/` with that phase and a matching prompt — completion is read live off
+  the reps folder, not tracked separately, so it can't drift out of sync.
+- Once a phase's sessions are exhausted, `npm run rep` says so and lets you free-session
   (type any prompt) instead of blocking you.
-- Add/reorder/edit lessons directly in `curriculum.json` any time — it's just data.
+- Add/reorder/edit sessions directly in `curriculum.json` any time — it's just data.
 
 ## Scripts
 
 - `npm run dev` — Vite dev server.
-- `npm run rep` — interactive new-rep scaffolder; loops so one run can create several reps.
+- `npm run rep` — creates a session's folder + starter `meta.json` + log row, and prints
+  the prompt to bring to Claude. Does not write `rep.js` — that's Claude's job, in
+  conversation. Loops so one run can queue up several sessions.
 - `npm run curriculum` — self-paced progress dashboard (see above).
+- `npm run storyboard -- <beats.json> <id>` — Phase 2 tool: builds a static
+  `reps/<id>/storyboard.html` contact sheet from a beat table (`{ time, vo, mood, visual }`
+  per beat). No motion, no GSAP — a planning artifact to review and lock before Phase 4
+  builds any timing.
 - `npm run lint:reps` — static HyperFrames-compatibility check across every `reps/*/rep.js`.
 - `npm run export -- <id>` — wraps the rep into a throwaway HyperFrames composition,
   renders it, and writes `out.mp4` + `thumb.gif` (720px wide, ≤4s, palette-optimized) into
@@ -185,9 +225,25 @@ keeps you moving.
   HyperFrames), but importing it directly from `scripts/lib/hf-compose.js` without
   declaring it would be fragile if either of those stopped depending on it.
 - **Self-paced curriculum, not a daily cap**: "too little to learn in one day" was solved
-  by (a) making `npm run rep` loop so one sitting can produce as many reps as you want —
-  the tool never limited this, `nextId()` already auto-increments `NN` per day, the
-  constraint was purely UX — and (b) a `curriculum.json` lesson bank so you're never stuck
+  by (a) making `npm run rep` loop so one sitting can produce as many sessions as you want
+  — the tool never limited this, `nextId()` already auto-increments `NN` per day, the
+  constraint was purely UX — and (b) a `curriculum.json` session bank so you're never stuck
   inventing a prompt. Completion is derived live from `reps/*/meta.json` (phase + matching
   prompt) rather than tracked in a separate progress file, so it can't drift out of sync
   with what you've actually logged.
+- **Direction, not hand-authoring (later revision)**: the curriculum moved from "you write
+  `rep.js` yourself, phases are GSAP-syntax topics" to "you direct in plain language,
+  Claude writes `rep.js`, phases are design-judgment topics (layout, storyboarding,
+  typographic decision-making, timing, 3D-as-vocabulary)." `curriculum.json` and
+  `new-rep.js` were rewritten for this: sessions are now direction prompts, not syntax
+  exercises, and `new-rep.js` no longer scaffolds a blank template — it creates the
+  bookkeeping (folder, `meta.json` with `status: "awaiting-direction"`, log row) and prints
+  the prompt to bring to Claude, who writes and stages the actual `rep.js`. The rep
+  contract, harness, lint, and export pipeline are all unchanged — this only changes who
+  authors the code inside that contract, not the contract itself.
+- **Storyboarding added (`scripts/storyboard.js`)**: a new Phase 2 planning tool, matching
+  a real HyperFrames convention (an agent-authored `storyboard.html` proposal, reviewed
+  before any motion is built). Takes a JSON beat table (`{ time, vo, mood, visual }`) and
+  renders a static, styled contact sheet — same font/color tokens as the export stage, no
+  GSAP, no timeline. Exists so sequence-level judgment (does this order of beats make
+  sense) happens cheaply as a static review pass before Phase 4 commits to any timing.

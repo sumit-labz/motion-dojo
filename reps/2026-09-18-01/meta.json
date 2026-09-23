@@ -1,8 +1,8 @@
 {
   "title": "Word fade + rise",
-  "phase": 1,
+  "phase": 4,
   "prompt": "Fade in and move a single word using power2.out",
-  "notes": "",
+  "notes": "Retagged from Phase 1 to Phase 4 (2026-09-23): built under the pre-rewrite curriculum, where Phase 1 meant weight/timing. Under the current 5-phase scheme Phase 1 is layout/staging with no motion, so this timing study now belongs in Phase 4 (motion as direction).",
   "date": "2026-09-18",
   "candidate": false,
   "fps": 60,
